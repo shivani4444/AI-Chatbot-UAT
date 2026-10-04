@@ -1,0 +1,155 @@
+TC #,Functional Area,Test Case,Preconditions,Test Steps,Expected Result,Pass / Fail
+FC-01,Forms List & Navigation,Stat Cards Accuracy,Multiple forms exist in various statuses,"1. Navigate to Forms
+2. Observe the four stat cards
+3. Cross-check each count against filtered table",Total Forms matches all rows; Published count matches published rows; Total Submissions matches sum across all forms,
+FC-02,Forms List & Navigation,Filter by Status,"Forms exist in Draft, Published, Archived states","1. Navigate to Forms
+2. Apply filter: Status = Draft
+3. Observe results
+4. Repeat for Published and Archived",Only forms matching selected status shown; Table count changes with each filter; Clearing filter restores all forms,
+FC-03,Forms List & Navigation,Table Columns Present,At least one form exists,"1. Navigate to Forms
+2. Observe table columns",Name column shows form name; Status badge colour-coded; Submission count shown; Created date formatted correctly,
+FC-04,Forms List & Navigation,Delete a Form,A Draft or Archived form exists,"1. Navigate to Forms
+2. Click trash icon on a form row
+3. Confirm deletion if prompted",Form removed from list; Total Forms count decreases by 1,
+FC-05,"Create, Publish & Manage Forms",Create New Form — Basic Details,User is on the Forms page,"1. Click + Create Form
+2. Enter a Form Name
+3. Click Save Draft
+4. Observe result",Form created with Draft status; Appears in Forms list; Editor opens with Overview and Settings tabs,
+FC-06,"Create, Publish & Manage Forms",Create Form — Name Required Validation,New form editor is open,"1. Leave Form Name blank
+2. Click Save Draft
+3. Observe validation",Save is blocked; Validation error shown on Form Name field; Form not created,
+FC-07,"Create, Publish & Manage Forms",Publish a Form — Happy Path,A Draft form exists with no unsaved changes,"1. Open the draft form
+2. Click Publish
+3. Observe status change",Form status changes to Published; Status badge updates in forms list; Chatbot can now trigger the form,
+FC-08,"Create, Publish & Manage Forms",Publish Blocked — Unsaved Changes,A Draft form is open,"1. Make a change in the form editor
+2. Observe Publish button state before saving",Publish button is disabled; Message indicates unsaved changes must be saved first,
+FC-09,"Create, Publish & Manage Forms",Archive a Published Form,A Published form exists,"1. Open the published form
+2. Change status to Archived
+3. Save
+4. Observe status and chatbot behaviour",Status changes to Archived; Chatbot no longer triggers the form; Existing submissions preserved,
+FC-10,"Create, Publish & Manage Forms",Form Editor — Overview Tab Statistics,Published form with at least 5 submissions,"1. Open an existing form
+2. Click Overview tab
+3. Review analytics section",Total Submissions count accurate; Submissions This Week reflects current week; Completion Rate % correct; Recent Submissions shows last 10 entries,
+FC-11,Trigger Phrases,Trigger Phrase — Semantic Match,Published form with trigger phrase: take a survey,"1. Open chatbot
+2. Type: I'd love to fill out a survey for you
+3. Observe bot response",Form triggered via semantic matching; Bot transitions into form mode; First question asked immediately,
+FC-12,Trigger Phrases,Trigger Phrase — Variation of Wording,Published form with trigger phrase: check my readiness,"1. Open chatbot
+2. Type: Can you assess whether I'm ready?
+3. Observe response",Form triggers based on intent match; Bot does not require exact phrase match,
+FC-13,Trigger Phrases,No Trigger — Unrelated Message,Published form with specific trigger phrases,"1. Open chatbot
+2. Type: What are your office hours?
+3. Observe bot response",Form does not trigger; Bot responds normally,
+FC-14,Trigger Phrases,Multiple Forms — Correct Form Triggered,Two published forms with different triggers,"1. Open chatbot
+2. Type: I want to leave some feedback
+3. Observe which form triggers","Feedback form triggers, not the survey; Correct form questions presented",
+FC-15,Lead Capture Timing,Lead Capture Timing — Before Form,Published form with Lead Capture Timing = Before Form,"1. Trigger the form via chatbot
+2. Observe what happens before first form question",Lead capture flow runs first; Form questions begin only after lead info collected; Submission linked to captured lead,
+FC-16,Lead Capture Timing,Lead Capture Timing — After Form,Published form with Lead Capture Timing = After Form,"1. Trigger the form
+2. Complete all form questions
+3. Observe what happens next",Form questions presented first; Lead capture initiates after last question; Submission linked to lead at end,
+FC-17,Lead Capture Timing,Lead Capture Timing — Optional,Published form with Lead Capture Timing = Optional,"1. Trigger the form
+2. When lead capture offered, choose to skip
+3. Complete the form",Lead capture is skippable; Form submission recorded without contact; No error occurs,
+FC-18,Lead Capture Timing,Lead Capture — No Config Exists,Published form; no Lead Capture config exists,"1. Trigger the form
+2. Observe whether lead capture initiates",Lead capture does not run; Form proceeds directly to questions; No error shown,
+FC-19,Fixed Fields & Validation,Fixed Field — Text Type,Form with a Text fixed field,"1. Trigger form
+2. Type: Sydney Operations Team
+3. Observe bot accepts and moves on",Bot accepts text response; Moves to next field; Answer stored correctly,
+FC-20,Fixed Fields & Validation,Fixed Field — Email Validation,Form with an Email fixed field,"1. Reach email field
+2. Enter: not-an-email
+3. Observe bot response
+4. Enter: valid@example.com","Bot rejects invalid email and re-prompts; On valid entry, bot accepts; Valid email stored",
+FC-21,Fixed Fields & Validation,Fixed Field — Phone Validation,Form with a Phone fixed field,"1. Reach phone field
+2. Enter: call me later
+3. Observe re-prompt
+4. Enter: +61 412 345 678",Invalid input rejected with re-prompt; Valid phone number accepted; Number stored,
+FC-22,Fixed Fields & Validation,Fixed Field — Number Type Validation,Form with a Number fixed field,"1. Reach number field
+2. Enter: We are medium-sized
+3. Observe re-prompt
+4. Enter: 42",Non-numeric triggers re-prompt; Numeric value accepted; Value stored as number,
+FC-23,Fixed Fields & Validation,Fixed Field — Select Type Options,"Form with a Select field: Small, Medium, Large","1. Reach select field
+2. Enter: Huge
+3. Observe response
+4. Enter: Medium",Bot presents available options; Invalid option triggers re-prompt; Valid option accepted and stored,
+FC-24,Fixed Fields & Validation,Fixed Field — Date Type,Form with a Date fixed field,"1. Reach date field
+2. Enter: next tuesday
+3. Observe response
+4. Enter: 15/06/2025",Ambiguous dates handled gracefully; Valid date accepted; Date stored correctly,
+FC-25,Fixed Fields & Validation,Fixed Field — Yes/No Type,Form with a Yes/No fixed field,"1. Reach Yes/No field
+2. Enter: maybe
+3. Observe re-prompt
+4. Enter: Yes",Non-boolean triggers re-prompt; Yes or No accepted; Answer stored as boolean,
+FC-26,Fixed Fields & Validation,Fixed Field — Required Validation,Form with a required fixed field,"1. Reach required field
+2. Enter: skip
+3. Observe bot response",Bot re-prompts indicating field is required; Flow does not advance until answer provided,
+FC-27,Fixed Fields & Validation,Fixed Field — Min/Max Length Validation,"Form with Text field; Min Length=10, Max Length=100","1. Reach text field
+2. Enter: Hi (too short)
+3. Enter string >100 chars
+4. Enter valid 20-char response",Too-short triggers re-prompt; Too-long triggers re-prompt; Valid-length input accepted,
+FC-28,Smart Fields,Smart Field — Vague Answer Triggers Clarification,Form with Smart field; Acceptance criteria set,"1. Reach smart field
+2. Enter: Things just aren't working
+3. Observe bot response",Bot asks for clarification; Does not accept vague response; Requests more specific detail,
+FC-29,Smart Fields,Smart Field — Specific Answer Accepted,Form with Smart field and acceptance criteria,"1. Reach smart field
+2. Provide a specific detailed answer meeting criteria
+3. Observe bot response",Bot accepts the answer; Moves to next field without clarification; Answer stored,
+FC-30,Smart Fields,Smart Field — Max Clarification Turns Reached,Form with Smart field; Max Clarification Turns=2,"1. Reach smart field
+2. Enter vague answer
+3. Enter vague again
+4. Enter vague third time
+5. Observe behaviour","Bot asks clarification up to 2 times; After max turns, moves on; Incomplete answer stored",
+FC-31,Smart Fields,Smart Field — Empty Acceptance Criteria,Form with Smart field; Acceptance Criteria empty,"1. Reach smart field
+2. Enter a brief response
+3. Observe bot acceptance",Bot applies general acceptance logic; Most reasonable responses accepted; No endless loop,
+FC-32,Smart Fields,Smart Field — Guidance Not Shown to Visitor,Form with Smart field with Guidance text set,"1. Reach smart field
+2. Observe what text bot shows visitor",Guidance text NOT shown verbatim; Only Question Text displayed; Guidance influences bot internally,
+FC-33,Field Ordering,Field Order — Bot Asks in Configured Sequence,Form with 3 fields: Name > Company > Challenge,"1. Trigger form
+2. Observe sequence of bot questions","Bot asks Name first, then Company, then Challenge; Order matches configured sequence",
+FC-34,Field Ordering,Field Order — Reorder Fields via Drag,Published form with 3+ fields,"1. Open form Settings tab
+2. Drag second field to first position
+3. Save
+4. Trigger form in chatbot",Dragged field asked first; All other fields follow in new order; Submission reflects new order,
+FC-35,Chatbot Instruction,Chatbot Instruction — Applied During Form,Form with distinct Chatbot Instruction set,"1. Trigger the form
+2. Observe bot language and tone throughout",Bot uses tone defined in Chatbot Instruction; Distinct from main system prompt; Reverts after form,
+FC-36,Chatbot Instruction,Chatbot Instruction — Template Applied,Form Settings tab open,"1. Click Templates in Chatbot Instruction section
+2. Select a template
+3. Observe instruction field",Template text populates field; Within 2000 char limit; Field can be further edited,
+FC-37,Chatbot Instruction,Chatbot Instruction — Max 2000 Characters Enforced,Form Settings tab open,"1. Paste text exceeding 2000 chars into Chatbot Instruction
+2. Attempt to save",Character limit enforced; Save blocked or text truncated; User notified of limit,
+FC-38,Completion Actions,Email Notification on Form Completion,Form with email notification action configured,"1. Trigger form in chatbot
+2. Complete all fields
+3. Check recipient inbox",Email arrives promptly after completion; Subject line matches config; Body contains correct submission data,
+FC-39,Completion Actions,Webhook Fires on Form Completion,Form with webhook action configured,"1. Complete form in chatbot
+2. Check webhook endpoint logs",POST request received; Payload contains all form submission data; Custom headers present if configured,
+FC-40,Completion Actions,Multiple Actions Run in Order,Form with email (first) and webhook (second) actions,"1. Complete the form
+2. Check email inbox
+3. Check webhook endpoint logs",Email fires first; Webhook fires second; Both receive correct submission data,
+FC-41,Completion Actions,Action Failure — Error Status Recorded,Form with webhook pointing to invalid URL,"1. Complete form
+2. Navigate to form submissions
+3. Filter by With Errors",Submission appears in With Errors filter; Detail shows which action failed; Other actions still run,
+FC-42,Submissions & Exports,Submission Recorded After Form Completion,Published form exists,"1. Trigger and complete form
+2. Open form editor
+3. Click View Submissions","New submission appears; Date/time, answers, duration, status shown; Submission count increments by 1",
+FC-43,Submissions & Exports,Submissions — Search by Answer Value,Multiple form submissions exist,"1. Open View Submissions
+2. Enter a specific answer value in search box
+3. Observe filtered results",Only submissions containing that value shown; Search matches across any field value,
+FC-44,Submissions & Exports,Submissions — Date Range Filter,Submissions exist across multiple dates,"1. Open View Submissions
+2. Apply filter: This Week
+3. Switch to This Month",This Week shows only current week; This Month shows current month; All Time shows all submissions,
+FC-45,Submissions & Exports,Submissions — Status Filter (Completed vs With Errors),Mix of completed and error submissions exist,"1. Open View Submissions
+2. Filter by Completed
+3. Filter by With Errors",Completed shows only successful; With Errors shows only failed action submissions; Counts align with totals,
+FC-46,Submissions & Exports,Submission Detail — All Answers Shown,A completed form submission exists,"1. Open View Submissions
+2. Click on a submission row",Full detail view opens; All field answers displayed; Score shown if assessment type; Action statuses shown,
+FC-47,Submissions & Exports,Submission Detail — Duration Recorded,A completed form submission exists,"1. Open View Submissions
+2. Observe Duration column
+3. Open submission detail",Duration displayed in table; Reflects actual time from start to completion; Consistent with detail view,
+FC-48,Submissions & Exports,Export Submissions as CSV,Multiple submissions exist,"1. Open View Submissions
+2. Apply a date range filter
+3. Click Export
+4. Open downloaded file",CSV downloads successfully; Contains only filtered submissions; All fields and values present as columns,
+FC-49,Form Status Behaviour,Draft Form — Not Triggered by Chatbot,A form exists in Draft status with trigger phrases,"1. Open chatbot
+2. Send message matching draft form trigger phrase
+3. Observe bot response",Draft form does NOT trigger; Bot responds normally without entering form mode,
+FC-50,Form Status Behaviour,"Archived Form — Not Triggered, Submissions Preserved",A Published form with submissions is archived,"1. Archive the form
+2. Try triggering via chatbot
+3. Navigate to View Submissions for archived form",Archived form does not trigger in chatbot; Existing submissions still accessible and intact,

@@ -1,0 +1,98 @@
+TC #,Functional Area,Test Case,Preconditions,Test Steps,Expected Result,Pass / Fail
+LC-01,Configuration & Setup,Create Default Configuration,No lead capture config exists; User has admin access,"1. Navigate to Settings > Lead Capture
+2. Confirm no configuration exists
+3. Click Create Default Configuration
+4. Observe result","Default configuration created; Name, Email, Phone fields pre-populated; Save Configuration button available",
+LC-02,Configuration & Setup,Save Valid Configuration,Lead capture config exists with name and email fields,"1. Go to Settings > Lead Capture
+2. Verify name and email fields present
+3. Click Save Configuration
+4. Observe confirmation",Configuration saves successfully; Success message displayed; Config persists on refresh,
+LC-03,Configuration & Setup,Block Save — Missing Required Fields,Lead capture config exists,"1. Go to Settings > Lead Capture
+2. Remove the name field
+3. Attempt to click Save Configuration
+4. Observe validation",Save is blocked; Validation error shown; Configuration not persisted,
+LC-04,Configuration & Setup,Add Custom Capture Field (Dropdown),Valid lead capture config exists,"1. Go to Settings > Lead Capture
+2. Add new field type Dropdown
+3. Enter comma-separated options e.g. Sales, Support, General
+4. Save Configuration",New dropdown field appears; Options stored correctly; Field appears in collection flow when triggered,
+LC-05,Configuration & Setup,Reorder Capture Fields,Config has at least 3 fields,"1. Go to Settings > Lead Capture
+2. Use arrows to reorder fields
+3. Save Configuration
+4. Trigger a lead capture conversation",Fields display in new order in settings; Bot asks questions in reordered sequence,
+LC-06,Trigger Keywords & Phrases,Trigger Phrase — Semantic Match,Lead capture configured; Trigger phrase: contact me about your services,"1. Open chatbot
+2. Type: I'd like someone to get in touch with me
+3. Observe bot response",Lead capture flow activates via semantic matching; Bot transitions into collection flow; First field requested,
+LC-07,Trigger Keywords & Phrases,Trigger Keyword — Exact Text Match,Lead capture configured; Trigger keyword: pricing,"1. Open chatbot
+2. Type: Can you send me pricing info?
+3. Observe bot response",Lead capture flow activates; Bot begins collecting lead fields,
+LC-08,Trigger Keywords & Phrases,No Trigger — Unrelated Message,Lead capture configured with specific triggers,"1. Open chatbot
+2. Type: What are your business hours?
+3. Observe bot response",Lead capture flow does NOT activate; Bot responds normally,
+LC-09,Trigger Keywords & Phrases,No Triggers Configured — Manual Start Only,Lead capture configured with no triggers,"1. Open chatbot
+2. Type various messages
+3. Observe that auto-trigger never fires",Lead capture does not auto-start; Flow only starts manually,
+LC-10,Lead Capture Flow,Happy Path — Full Lead Collection,"Config with Name, Email, Phone fields; Trigger phrase active","1. Type trigger phrase in chatbot
+2. Respond: Name: Sarah Chen, Email: sarah@example.com, Phone: +61 412 345 678
+3. Observe final message",Bot asks each field in configured order; Consent text displayed; Thank you message shown; Conversation continues normally,
+LC-11,Lead Capture Flow,Required Field Validation,Config with required Email field,"1. Trigger lead capture flow
+2. When bot asks for email, type: skip
+3. Observe bot behaviour",Bot re-prompts for required field; Flow does not advance until required field provided,
+LC-12,Lead Capture Flow,Optional Field Skipped,Config with at least one non-required field,"1. Trigger lead capture
+2. When optional field prompted, type: skip
+3. Observe flow progression",Bot accepts the skip; Flow continues to next field; Lead captured without optional value,
+LC-13,Lead Capture Flow,Consent Text Displayed,Consent text configured in settings,"1. Trigger lead capture
+2. Complete the collection flow
+3. Observe when consent text appears",Consent text displayed during flow; Lead record shows consent given; Consent timestamp stored,
+LC-14,Lead Capture Flow,Dropdown Field Options,"Config includes Dropdown field with options: Sales, Support, General","1. Trigger lead capture
+2. When dropdown field prompted, provide a valid option
+3. Observe lead record",Bot presents available options; Selected option stored correctly in lead record,
+LC-15,Lead Management & Viewing,Lead Appears in Leads Page,Lead capture successfully completed,"1. Complete full lead capture
+2. Navigate to Leads in sidebar
+3. Observe lead list","New lead appears; Status is New; Name, Email, Phone, Source, Created date correct",
+LC-16,Lead Management & Viewing,Stat Cards — Counts Accurate,Multiple leads exist across different statuses,"1. Navigate to Leads
+2. Observe: Total, New, Qualified, Converted stat cards",Each card count matches filtered table count; Total matches sum of all leads,
+LC-17,Lead Management & Viewing,Search Leads,Multiple leads exist,"1. Navigate to Leads
+2. Enter a partial name in search box
+3. Observe table results","Table filters to show only matching leads; Matches by name, email, phone or company",
+LC-18,Lead Management & Viewing,Filter Leads by Status,Leads exist in multiple statuses,"1. Navigate to Leads
+2. Select Qualified from status filter
+3. Observe table",Only Qualified leads displayed; Count matches Qualified stat card,
+LC-19,Lead Management & Viewing,Open Lead Detail Page,At least one lead exists,"1. Navigate to Leads
+2. Click a lead row or eye icon
+3. Observe detail page","Lead detail opens; Contact info, status, notes, assigned-to visible; Custom fields and consent details displayed",
+LC-20,Lead Management & Viewing,Update Lead Status,Lead exists with status New,"1. Open lead detail
+2. Change Status to Contacted
+3. Click Save Changes
+4. Refresh and re-open lead",Status updates to Contacted; Change persists after refresh; Leads table reflects updated status,
+LC-21,Lead Management & Viewing,Add Notes to Lead,Lead detail page open,"1. Open lead detail
+2. Enter text in Notes field
+3. Click Save Changes
+4. Refresh page",Notes saved and displayed on refresh; Notes content preserved exactly,
+LC-22,Lead Management & Viewing,Assign Lead to Team Member,Lead detail page open,"1. Open lead detail
+2. Set Assigned To field
+3. Click Save Changes",Assignment saved; Assigned user shown on lead detail and in table view,
+LC-23,Lead Management & Viewing,Delete Lead,At least one lead exists,"1. Navigate to Leads
+2. Click trash icon on a lead row
+3. Confirm deletion if prompted",Lead removed from table; Total count decreases by 1,
+LC-24,Lead Management & Viewing,Export Leads as CSV,Multiple leads exist,"1. Navigate to Leads
+2. Apply a status filter
+3. Click Export CSV
+4. Open downloaded file",CSV downloads successfully; Contains only leads matching filter; All columns present,
+LC-25,Actions (Email & Webhook),Email Notification on Lead Capture,Email notification action configured; At least one recipient set,"1. Trigger and complete a lead capture
+2. Check recipient inbox",Email arrives promptly; Placeholders replaced with actual values; tenant_name and captured_at correct,
+LC-26,Actions (Email & Webhook),Webhook Fires on Lead Capture,Webhook action configured with valid endpoint URL,"1. Trigger and complete a lead capture
+2. Check webhook endpoint logs",POST request received; Payload includes all captured lead data; Custom headers present if configured,
+LC-27,Actions (Email & Webhook),Test Action Button,At least one action configured,"1. Go to Settings > Lead Capture
+2. Click Test button on an action
+3. Check the action destination",Test payload delivered to action destination; Confirmation displayed in UI,
+LC-28,Actions (Email & Webhook),Multiple Actions — All Run in Order,Two or more actions configured,"1. Complete a lead capture
+2. Check email inbox
+3. Check webhook endpoint logs",Both actions fire; Actions run in configured order; Each receives correct lead data,
+LC-29,System Prompt,System Prompt Applied During Capture,Distinct system prompt set for lead capture,"1. Trigger lead capture
+2. Observe bot language and tone during collection",Bot uses tone defined in lead capture system prompt; Distinct from main chatbot prompt,
+LC-30,System Prompt,System Prompt Template Applied,Lead capture settings open,"1. Go to Settings > Lead Capture
+2. Click Templates in System Prompt section
+3. Select a template
+4. Observe field",Template text populates field; Character count within 2000 limit; Prompt can be further edited,
+LC-31,System Prompt,System Prompt Max 2000 Characters Enforced,Lead capture settings open,"1. Paste text exceeding 2000 characters into System Prompt
+2. Attempt to save",Character limit enforced; Save blocked or text truncated at 2000 chars; User notified,

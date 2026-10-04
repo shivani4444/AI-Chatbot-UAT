@@ -1,0 +1,165 @@
+TC #,Functional Area,Test Case,Preconditions,Test Steps,Expected Result,Pass / Fail
+PT-01,Tier Access & Feature Enforcement,Free Tier — Feature Access & Usage Limits,Tenant set to Free (L0) via Superadmin,"1. Log into Superadmin > Tenants > select tenant
+2. Set tier to Free (L0)
+3. Log into Client Console as tenant
+4. Attempt to send messages and start conversations
+5. Attempt to access Lead Capture, Form Capture, Human Handoff",Limited to 50 messages/month; Max 10 conversations/month; Lead Capture and Form Capture NOT accessible; Human Handoff NOT accessible; Only 1 channel available,
+PT-02,Tier Access & Feature Enforcement,Free Trial Tier — Feature Access Within Limits,Tenant set to Free Trial (L1); Trial not yet expired,"1. Set tenant to Free Trial via Superadmin
+2. Log into Client Console
+3. Verify accessible features
+4. Attempt to access Advanced Appearance Settings",Lead Capture and Form Capture accessible; 1000 messages / 100 conversations; Advanced Appearance Settings NOT accessible; Human Handoff NOT accessible,
+PT-03,Tier Access & Feature Enforcement,Essential Tier — Feature Access,Tenant set to Essential (L1),"1. Set tenant to Essential via Superadmin
+2. Log into Client Console
+3. Check Advanced Appearance Settings
+4. Check Advanced Knowledge Base
+5. Attempt to access Human Handoff",Advanced Appearance and Knowledge Base accessible; 2000 messages / 250 conversations/month; Human Handoff NOT accessible,
+PT-04,Tier Access & Feature Enforcement,Growth Tier — Integration Features Unlocked,Tenant set to Growth (L2),"1. Set tenant to Growth via Superadmin
+2. Log into Client Console
+3. Verify WhatsApp, Facebook, Instagram options
+4. Verify Human Handoff available
+5. Confirm usage limits","WhatsApp, Facebook, Instagram integrations accessible; Human Handoff accessible; 5000 messages / 1250 conversations/month",
+PT-05,Tier Access & Feature Enforcement,Enterprise Tier — Unlimited Team Members,Tenant set to Enterprise (L3),"1. Set tenant to Enterprise via Superadmin
+2. Log into Client Console
+3. Attempt to add multiple team members
+4. Verify conversation and message limits",Unlimited team members can be added; Messages unlimited; 5000 conversations/month; All Growth features accessible,
+PT-06,Tier Access & Feature Enforcement,Tier Downgrade — Premium Features Immediately Disabled,Tenant currently on Growth (L2),"1. Confirm Human Handoff accessible on Growth
+2. In Superadmin, downgrade tenant to Essential (L1)
+3. Return to Client Console
+4. Attempt to access Human Handoff",Tier badge updates immediately; Human Handoff no longer accessible; Social integrations disabled; Essential limits now apply,
+PT-07,Tier Access & Feature Enforcement,Tier Upgrade — Features Instantly Available,Tenant currently on Essential (L1),"1. Confirm Human Handoff NOT accessible on Essential
+2. Upgrade tenant to Growth (L2)
+3. Return to Client Console
+4. Check Human Handoff accessibility",Tier badge updates immediately; Human Handoff now accessible; New usage limits applied,
+PT-08,Superadmin Tier Management,Superadmin — View Tenant Tier,Multiple tenants exist across different tiers,"1. Log into Superadmin
+2. Navigate to Tenants page
+3. Review tenant list",Each tenant shows current tier badge; Tier level visible; All 5 tier types represented correctly,
+PT-09,Superadmin Tier Management,Superadmin — Change Tier via Dropdown,Superadmin access; Target tenant identified,"1. Open tenant detail page in Superadmin
+2. Locate Subscription Tier card
+3. Click tier dropdown
+4. Select different tier e.g. Growth
+5. Wait for loading indicator
+6. Observe tier badge",Dropdown lists all 5 tiers; Loading indicator appears briefly; Tier badge updates; Change takes effect without full reload,
+PT-10,Superadmin Tier Management,Superadmin — All Tier Options Present in Dropdown,Superadmin open on tenant detail page,"1. Open Subscription Tier dropdown
+2. List all visible options","Free (L0), Free Trial (L1), Essential (L1), Growth (L2), Enterprise (L3) all present; No other tiers shown",
+PT-11,Date/Time Configuration,Set Trial End Date in the Past,Tenant on Free Trial (L1); Superadmin access,"1. Open tenant in Superadmin
+2. Click Edit Subscription Dates
+3. Set Trial End to 1 hour in the past
+4. Save
+5. Wait up to 5 minutes for expiration check
+6. Observe tenant tier",Trial End date saved; Tier changes to Free (L0); Subscription status changes to canceled; Tenant can only access Free features,
+PT-12,Date/Time Configuration,Set Reset Datetime in the Past,Tenant on paid tier; Some usage already recorded,"1. Note current usage metrics
+2. Set Reset Datetime to 5 minutes in the past
+3. Save
+4. Wait up to 5 minutes for reset job
+5. Check usage metrics",Reset Datetime saved; All usage metrics reset to 0; Reset Datetime updated to 30 days in future; Tenant can use full quota,
+PT-13,Date/Time Configuration,Set Current Period End in the Past,Tenant has active paid subscription; Stripe webhook active,"1. Set Current Period End to a past date/time
+2. Save
+3. Monitor Stripe Dashboard for webhook event
+4. Check new period dates in Superadmin",Period End accepted; Stripe webhook processes period end; New billing period starts; Subscription remains active,
+PT-14,Date/Time Configuration,Date/Time Format Validation,Superadmin open on Edit Subscription Dates modal,"1. Attempt to enter invalid date: 25-01-2026
+2. Observe field behaviour
+3. Enter valid date: 2026-01-25T14:30
+4. Save",Invalid format rejected; Valid format accepted; Saved date reflected correctly,
+PT-15,Date/Time Configuration,All Four Date Fields Save Correctly,Superadmin open on tenant detail,"1. Click Edit Subscription Dates
+2. Set all four fields to valid future dates
+3. Save
+4. Re-open Edit Subscription Dates",All four dates saved without error; Re-opening shows updated values; Subscription Dates card reflects all four dates,
+PT-16,Payment Methods,Add Valid Payment Method — Visa Success Card,Logged into Client Console; On Payment Methods page,"1. Click Add Payment Method
+2. Enter card: 4242 4242 4242 4242, Expiry: 12/34, CVC: 123, ZIP: 12345
+3. Click Add Payment Method","Card added successfully; Shows Visa brand, last 4 digits 4242; Marked as Default if first card",
+PT-17,Payment Methods,Add Valid Payment Method — Mastercard,Client Console open; Payment Methods page open,"1. Click Add Payment Method
+2. Enter card: 5555 5555 5555 4444, Expiry: 12/34, CVC: 123, ZIP: 12345
+3. Submit","Mastercard accepted; Shows Mastercard brand, last 4 digits 4444; Listed in payment methods",
+PT-18,Payment Methods,Add Declined Card — Failure Handled Gracefully,Client Console open; Payment Methods page,"1. Click Add Payment Method
+2. Enter card: 4000 0000 0000 0002
+3. Enter Expiry: 12/34, CVC: 123, ZIP: 12345
+4. Click Add Payment Method",Payment method NOT added; Error message shown (card declined); Existing methods unaffected; No crash,
+PT-19,Payment Methods,Add Card Requiring 3D Secure Authentication,Client Console open; Payment Methods page,"1. Click Add Payment Method
+2. Enter card: 4000 0025 0000 3155
+3. Submit and observe",3DS authentication challenge appears; On success: card added; On fail: appropriate message shown,
+PT-20,Payment Methods,Add Card That Fails at Payment (Not at Add Step),Client Console open; Payment Methods page,"1. Add card: 4000 0000 0000 0341
+2. Confirm card added
+3. Use card to attempt subscription purchase",Card adds successfully; Subscription payment fails with this card; Error shown; Subscription not activated,
+PT-21,Payment Methods,Set Default Payment Method,Two or more payment methods exist,"1. Navigate to Payment Methods page
+2. Identify a card NOT marked as default
+3. Click Set Default
+4. Observe both cards",Clicked card gains Default badge; Previous default no longer shows Default; Change takes effect immediately,
+PT-22,Payment Methods,Remove Non-Default Payment Method,Two payment methods exist; No single-card active subscription,"1. Navigate to Payment Methods
+2. Click delete icon on non-default card
+3. Confirm deletion if prompted",Card removed from list; Remaining card still shown; No error occurs,
+PT-23,Payment Methods,Cannot Delete Last Payment Method (Active Subscription),Only one payment method exists; Active subscription in place,"1. Navigate to Payment Methods
+2. Attempt to click delete on the sole payment method",Delete blocked with explanatory message; Card remains in list,
+PT-24,Subscription Creation & Upgrades,Create Essential Monthly Subscription — Happy Path,Valid payment method added; No active subscription,"1. Navigate to Subscription > View Plans
+2. Select Essential > Monthly billing
+3. Review Checkout page
+4. Select payment method
+5. Click Complete Purchase",Redirected to success page; Subscription status: Active; Essential features accessible; Stripe shows new subscription; Invoice paid,
+PT-25,Subscription Creation & Upgrades,Create Growth Annual Subscription,Valid payment method added; No active subscription,"1. Navigate to Plans
+2. Select Growth > Annual billing
+3. Verify annual price
+4. Complete purchase",Annual subscription created; Growth features immediately accessible; Billing cycle shown as Annual; Next billing ~12 months,
+PT-26,Subscription Creation & Upgrades,Create Subscription — No Payment Method Blocked,No payment method on account,"1. Navigate to Plans
+2. Select a plan
+3. Observe Checkout page",No payment method selectable; Complete Purchase blocked or shows error; Option to add new payment method shown,
+PT-27,Subscription Creation & Upgrades,Create Subscription — Payment Fails at Checkout,Card 4000 0000 0000 0341 added,"1. Select a plan
+2. Select 0341 card
+3. Click Complete Purchase",Payment fails at charge step; Error message shown; Subscription not activated; User directed to update payment,
+PT-28,Subscription Creation & Upgrades,Upgrade Subscription — Preview Shown Before Confirming,Active Essential subscription,"1. Navigate to Subscription
+2. Click Upgrade Plan
+3. Select Growth
+4. Review upgrade preview",Current plan vs New plan displayed; Proration credit shown if applicable; Charge today amount shown; Next billing date displayed,
+PT-29,Subscription Creation & Upgrades,Upgrade Subscription — Completes Successfully,Active Essential subscription; Valid payment method,"1. From upgrade preview, select payment method
+2. Click Complete Upgrade
+3. Return to Client Console",Upgraded to Growth immediately; Human Handoff and social integrations accessible; Stripe shows updated plan; New invoice generated,
+PT-30,Subscription Creation & Upgrades,Subscription Status Displayed Correctly,Access to tenants in various subscription states,"1. View tenant with Active subscription
+2. View tenant with Trialing subscription
+3. View tenant with Past Due subscription
+4. View tenant with Canceled subscription",Active: features accessible; Trialing: trial badge shown; Past Due: warning shown; Canceled: features removed,
+PT-31,Subscription Creation & Upgrades,Stripe Customer Created on First Subscription,Tenant has never subscribed; Valid payment method added,"1. Create subscription from Client Console
+2. Log into Stripe Dashboard (test mode)
+3. Navigate to Customers
+4. Search for tenant email",Customer record exists in Stripe; Email matches tenant; Metadata includes tenant_id; Payment method attached,
+PT-32,Stripe Dashboard Verification,Verify Subscription Details in Stripe Dashboard,Active subscription exists; Stripe Dashboard access in Test Mode,"1. Log into Stripe > Customers
+2. Find customer by tenant email
+3. Open customer > Subscriptions
+4. Compare with Client Console",Status: Active or Trialing; Plan matches selected tier; Billing cycle correct; Period dates correct; Payment method matches,
+PT-33,Stripe Dashboard Verification,Verify Invoice Generated After Subscription Purchase,Active subscription with successful payment card,"1. Open customer in Stripe Dashboard
+2. Click Invoices tab
+3. Find most recent invoice",Invoice exists; Status: Paid; Amount matches plan price; Billing period matches subscription dates,
+PT-34,Stripe Dashboard Verification,Verify Stripe Customer Metadata Contains Tenant ID,Subscription created; Stripe Dashboard open,"1. Find customer in Stripe
+2. Open customer details
+3. Check metadata section",tenant_id present in metadata; Matches Superadmin tenant ID; No unexpected metadata fields,
+PT-35,Test Clock — Time Simulation (Dev Only),Advance 1 Month — Monthly Subscription Renewal,Active monthly subscription; Stripe test mode (dev only); Test Clock Controls visible,"1. Create subscription in Client Console
+2. Go to Superadmin > Tenant > Test Clock Controls
+3. Note current Test Clock Time
+4. Click Advance 1 Month
+5. Wait for status Ready
+6. Check Stripe Dashboard for new invoice
+7. Check Subscription Dates in Superadmin",Test Clock advances 30 days; New invoice created and paid; Period dates updated; Subscription remains Active; Usage metrics reset to 0,
+PT-36,Test Clock — Time Simulation (Dev Only),Advance 1 Week,Active subscription or trialing tenant; Test Clock Controls visible,"1. Go to Superadmin > Tenant > Test Clock Controls
+2. Click Advance 1 Week
+3. Wait for Ready status",Test Clock advances 7 days; Events due within 7 days processed; Status returns to Ready,
+PT-37,Test Clock — Time Simulation (Dev Only),Custom Duration Advance,Test Clock Controls visible in Superadmin,"1. Locate Custom Duration section
+2. Enter 45 days
+3. Click Advance
+4. Wait for Ready",Test Clock advances exactly 45 days; Multiple events processed if dates passed; Status returns to Ready,
+PT-38,Test Clock — Time Simulation (Dev Only),Failed Payment at Renewal Causes Downgrade,Active subscription with valid card; Stripe Dashboard access; Test Clock Controls available,"1. Replace customer payment method with declined card in Stripe
+2. Go to Superadmin > Test Clock Controls
+3. Click Advance 1 Month
+4. Wait for Ready
+5. Check status in Stripe and Superadmin",Payment fails at renewal; Subscription status changes to past_due; Tenant downgraded to Free tier,
+PT-39,Test Clock — Time Simulation (Dev Only),Three Consecutive Billing Cycles,Active monthly subscription; Test Clock Controls available,"1. Note current subscription details
+2. Click Advance 1 Month — verify: new invoice, active, usage reset
+3. Repeat for cycle 2
+4. Repeat for cycle 3",3 separate invoices generated; Each invoice paid; Subscription active throughout; Usage resets each cycle; Period dates increment monthly,
+PT-40,Test Clock — Time Simulation (Dev Only),Controls NOT Visible in Production/Live Mode,Access to production or live-mode environment,"1. Open Superadmin on production
+2. Navigate to any tenant detail
+3. Look for Test Clock Controls card",Test Clock Controls card NOT visible; No advance time buttons displayed; Tenant page functions normally,
+PT-41,Test Clock — Time Simulation (Dev Only),Trial Expiration via Time Advance,Tenant on Free Trial; Trial End set to 5 days from now; Test Clock Controls available,"1. Confirm tenant on Free Trial
+2. Set Trial End to 5 days from current test clock time
+3. Click Advance 1 Week
+4. Wait for Ready
+5. Check tenant tier",Trial expiration processed; Tenant downgraded to Free (L0); Subscription status: canceled; Free tier limits apply,
+PT-42,Test Clock — Time Simulation (Dev Only),Page Auto-Refreshes During Advancement,Test Clock Controls visible,"1. Click any advance button
+2. Observe Test Clock Controls card status
+3. Do not manually refresh — watch for auto-refresh",Status changes to Advancing immediately; Page auto-refreshes every ~3 seconds; Status returns to Ready; Updated time displayed,
